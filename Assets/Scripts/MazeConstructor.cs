@@ -14,6 +14,7 @@ public class MazeConstructor : MonoBehaviour
     public int[,] data { get; private set; }
 
     private MazeDataGenerator dataGenerator;
+    private MazeMeshGenerator meshGenerator;
 
 
     void Awake()
@@ -26,6 +27,7 @@ public class MazeConstructor : MonoBehaviour
         };
 
         dataGenerator = new MazeDataGenerator();
+        meshGenerator = new MazeMeshGenerator();
     }
 
 
@@ -37,6 +39,24 @@ public class MazeConstructor : MonoBehaviour
             Debug.LogWarning("Odd numbers work better for maze size");
         }
         data = dataGenerator.FromDimensions(maxRows, maxCols);
+        DisplayMaze();
+    }
+
+    private void DisplayMaze()
+    {
+        GameObject go = new GameObject();
+        go.transform.position = Vector3.zero;
+        go.name = "Procedural Maze";
+        go.tag = "Generated";
+
+        MeshFilter mf = go.AddComponent<MeshFilter>();
+        mf.mesh = meshGenerator.FromData(data);
+
+        MeshCollider mc = go.AddComponent<MeshCollider>();
+        mc.sharedMesh = mf.mesh;
+
+        MeshRenderer mr = go.AddComponent<MeshRenderer>();
+        mr.materials = new Material[2] { mazeMat1, mazeMat2 };
     }
 
     //This method simply draws out a design of the maze on paper
