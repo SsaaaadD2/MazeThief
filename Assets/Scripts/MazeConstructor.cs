@@ -15,6 +15,7 @@ public class MazeConstructor : MonoBehaviour
 
     private MazeDataGenerator dataGenerator;
     private MazeMeshGenerator meshGenerator;
+    private List<List<int>> freeSpots;
 
     public float hallWidth { get; private set; }
     public float hallHeight { get; private set; }
@@ -37,6 +38,7 @@ public class MazeConstructor : MonoBehaviour
 
         dataGenerator = new MazeDataGenerator();
         meshGenerator = new MazeMeshGenerator();
+        freeSpots = GlobalVars.freeSpots;
     }
 
     public void DisposeOldMaze()
@@ -48,7 +50,8 @@ public class MazeConstructor : MonoBehaviour
         }
     }
 
-    //Find the first empty space available and start there
+    //Find all the empty spots
+    //Place start position at first empty spot
     public void FindStartPosition()
     {
         int[,] maze = data;
@@ -60,32 +63,22 @@ public class MazeConstructor : MonoBehaviour
             {
                 if (maze[i, j] == 0)
                 {
-                    startRow = i;
-                    startCol = j;
-                    return;
+                    List<int> free = new List<int>();
+                    free.Add(i);
+                    free.Add(j);
+                    freeSpots.Add(free);
                 }
             }
         }
+        startRow = freeSpots[0][0];
+        startCol = freeSpots[0][1];
     }
 
-    //Find the last empty space available and place the treasure there
+    //Place treasure at last empty spot
     public void FindGoalPosition()
     {
-        int[,] maze = data;
-        int maxRows = data.GetUpperBound(0);
-        int maxCols = data.GetUpperBound(1);
-        for (int i = maxRows; i >= 0; i--)
-        {
-            for (int j = maxCols; j >= 0; j--)
-            {
-                if (maze[i, j] == 0)
-                {
-                    goalRow = i;
-                    goalCol = j;
-                    return;
-                }
-            }
-        }
+        goalRow = freeSpots[freeSpots.Count - 1][0];
+        goalCol = freeSpots[freeSpots.Count - 1][1];
     }
 
     //Create object for start trigger and fill its properties
@@ -128,13 +121,12 @@ public class MazeConstructor : MonoBehaviour
             Debug.LogWarning("Odd numbers work better for maze size");
         }
         DisposeOldMaze();
-
         data = dataGenerator.FromDimensions(maxRows, maxCols);
         FindStartPosition();
         FindGoalPosition();
 
-        hallHeight = meshGenerator.height;
-        hallWidth = meshGenerator.width;
+        hallHeight = GlobalVars.hallHeight;
+        hallWidth = GlobalVars.hallWidth;
 
         DisplayMaze();
 

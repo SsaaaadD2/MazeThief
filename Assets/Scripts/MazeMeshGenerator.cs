@@ -9,8 +9,8 @@ public class MazeMeshGenerator
 
     public MazeMeshGenerator()
     {
-        width = 3.75f;
-        height = 3.5f;
+        width = GlobalVars.hallWidth;
+        height = GlobalVars.hallHeight;
     }
 
     public Mesh FromData(int[,] data)
