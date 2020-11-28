@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
+using static GlobalVars;
 
 [RequireComponent(typeof(MazeConstructor))]
 public class GameController : MonoBehaviour
@@ -11,6 +13,10 @@ public class GameController : MonoBehaviour
     [SerializeField] private Text instruction;
     [SerializeField] private int maxCols;
     [SerializeField] private int maxRows;
+
+    public NavMeshSurface navMeshSurface;
+    public AIController guardAgent;
+    //public NavMeshAgent playerAgent;
 
     private MazeConstructor generator;
 
@@ -48,6 +54,8 @@ public class GameController : MonoBehaviour
     private void StartNewMaze()
     {
         generator.GenerateNewMaze(maxRows, maxCols, OnStartTrigger, OnGoalTrigger);
+        navMeshSurface.BuildNavMesh();
+        Invoke("CreateGuard", 5f);
         float x = generator.startCol * generator.hallWidth;
         float y = 1.0f;
         float z = generator.startRow * generator.hallHeight;
@@ -95,7 +103,6 @@ public class GameController : MonoBehaviour
         score += 1;
         scoreLabel.text = score.ToString();
         instruction.text = "Get back home!";
-        instruction.enabled = true;
         instruction.CrossFadeAlpha(1, 0.5f, false);
         Invoke("FadeText", 4f);
 
@@ -110,5 +117,13 @@ public class GameController : MonoBehaviour
             player.enabled = false;
             Invoke("StartNewMaze", 4f);
         }
+    }
+
+    private void CreateGuard()
+    {
+        Instantiate(guardAgent, Vector3.zero, Quaternion.identity);
+        instruction.text = "Guard has been released";
+        instruction.CrossFadeAlpha(1, 0.5f, false);
+        Invoke("FadeText", 4f);
     }
 }

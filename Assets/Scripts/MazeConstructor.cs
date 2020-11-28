@@ -38,7 +38,7 @@ public class MazeConstructor : MonoBehaviour
 
         dataGenerator = new MazeDataGenerator();
         meshGenerator = new MazeMeshGenerator();
-        freeSpots = GlobalVars.freeSpots;
+        freeSpots = new List<List<int>>();
     }
 
     public void DisposeOldMaze()
@@ -101,9 +101,10 @@ public class MazeConstructor : MonoBehaviour
     {
         GameObject gObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
         gObj.transform.position = new Vector3(goalCol * hallWidth, .5f, startRow * goalCol);
+        GlobalVars.goalPos = new Vector3(gObj.transform.position.x, 1, gObj.transform.position.z);
         gObj.name = "Treasure";
         gObj.tag = "Generated";
-
+        gObj.layer = LayerMask.NameToLayer("AIGuard");
         gObj.GetComponent<MeshRenderer>().sharedMaterial = treasureMat;
         gObj.GetComponent<BoxCollider>().isTrigger = true;
 
@@ -132,6 +133,7 @@ public class MazeConstructor : MonoBehaviour
 
         PlaceStartTrigger(startCallback);
         PlaceGoalTrigger(goalCallback);
+        GlobalVars.freeSpots = freeSpots;
     }
 
     private void DisplayMaze()
