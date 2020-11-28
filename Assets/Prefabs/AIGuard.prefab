@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 5245822631564429144}
   - component: {fileID: 5245822631564429145}
   - component: {fileID: 5245822631564429147}
+  - component: {fileID: 1000170622814323292}
   m_Layer: 9
-  m_Name: Capsule
+  m_Name: AIGuard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,6 +57,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -67,6 +70,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -79,6 +83,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!136 &5245822631564429145
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -105,3 +110,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a8aec03096f0a4e8a5900996e6fcda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1000170622814323292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5245822631564429148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b15aa5866378ca41bba819d42581ffa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectedText: {fileID: 3857580874484849049, guid: da24c491d09453241b6e8da75aff78d1,
+    type: 3}
