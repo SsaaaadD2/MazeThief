@@ -4,11 +4,65 @@ using UnityEngine;
 
 public class AIDetection : MonoBehaviour
 {
-    public GameObject detectedText;
-    // Start is called before the first frame update
+    public bool hasDetected;
+    public float fieldOfView;
+
+    private MeshRenderer textMeshRenderer;
+    private bool isTransparent;
+    private SphereCollider sphereCollider;
+
     void Start()
     {
-        Instantiate(detectedText, 
-            new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), Quaternion.identity);
+        textMeshRenderer = GetComponentInChildren<MeshRenderer>();
+        textMeshRenderer.enabled = false;
+        sphereCollider = GetComponent<SphereCollider>();
+        hasDetected = false;
+        isTransparent = true;
+    }
+    // Start is called before the first frame update
+    void Update()
+    {
+
+        if ((hasDetected && isTransparent) || (!hasDetected && !isTransparent))
+        {
+            ChangeTextAlpha();
+        }
+        textMeshRenderer.transform.LookAt(Camera.main.transform);
+
+    }
+
+    void ChangeTextAlpha()
+    {
+        textMeshRenderer.enabled = (textMeshRenderer.enabled == true ? false : true);
+        isTransparent = !isTransparent;
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            Vector3 direction = other.transform.position - transform.position;
+            float angle = Vector3.Angle(transform.forward, direction);
+            if (angle <= fieldOfView / 2)
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, direction.normalized, out hit, sphereCollider.radius))
+                {
+                    Debug.DrawLine(transform.position + transform.up, sphereCollider.radius * transform.forward, Color.red);
+                    if (hit.collider.gameObject.tag == "Player")
+                    {
+                        hasDetected = true;
+                    }
+                }
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            hasDetected = false;
+        }
     }
 }
