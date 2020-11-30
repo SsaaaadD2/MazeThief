@@ -8,8 +8,8 @@ public static class GlobalVars
     public static int maxRows;
     public static int maxCols;
 
-    public static float hallWidth = 3.75f;
-    public static float hallHeight = 3.5f;
+    public static float hallWidth;
+    public static float hallHeight;
 
     public static Vector3 goalPos;
 }

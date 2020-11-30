@@ -15,6 +15,7 @@ public class AIController : MonoBehaviour
     {
         player = GameObject.Find("Player");
         detection = GetComponent<AIDetection>();
+        gameObject.tag = "Generated";
 
         targetSet = false;
     }

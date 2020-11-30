@@ -6,15 +6,14 @@ public class MazeConstructor : MonoBehaviour
 {
     public bool showDebug;
 
-    [SerializeField] private Material mazeMat1;
-    [SerializeField] private Material mazeMat2;
     [SerializeField] private Material treasureMat;
     [SerializeField] private Material startMat;
+    [SerializeField] private GameObject floor;
+    [SerializeField] private GameObject wall;
 
     public int[,] data { get; private set; }
 
     private MazeDataGenerator dataGenerator;
-    private MazeMeshGenerator meshGenerator;
     private List<List<int>> freeSpots;
 
     public float hallWidth { get; private set; }
@@ -37,7 +36,6 @@ public class MazeConstructor : MonoBehaviour
         };
 
         dataGenerator = new MazeDataGenerator();
-        meshGenerator = new MazeMeshGenerator();
         freeSpots = new List<List<int>>();
     }
 
@@ -126,8 +124,11 @@ public class MazeConstructor : MonoBehaviour
         FindStartPosition();
         FindGoalPosition();
 
-        hallHeight = GlobalVars.hallHeight;
-        hallWidth = GlobalVars.hallWidth;
+        hallHeight = floor.GetComponentInChildren<MeshRenderer>().bounds.size[0];
+        hallWidth = floor.GetComponentInChildren<MeshRenderer>().bounds.size[1];
+
+        GlobalVars.hallHeight = hallHeight;
+        GlobalVars.hallWidth = hallWidth;
 
         DisplayMaze();
 
@@ -143,49 +144,59 @@ public class MazeConstructor : MonoBehaviour
         go.name = "Procedural Maze";
         go.tag = "Generated";
 
-        MeshFilter mf = go.AddComponent<MeshFilter>();
-        mf.mesh = meshGenerator.FromData(data);
-
-        MeshCollider mc = go.AddComponent<MeshCollider>();
-        mc.sharedMesh = mf.mesh;
-
-        MeshRenderer mr = go.AddComponent<MeshRenderer>();
-        mr.materials = new Material[2] { mazeMat1, mazeMat2 };
+        CreateMaze(go);
     }
 
-    //This method simply draws out a design of the maze on paper
-    // "==" represents a wall and "..." represents an open space
-    void OnGUI()
+    void CreateMaze(GameObject parent)
     {
-        if (showDebug == false)
+        int rMax = data.GetUpperBound(0);
+        int cMax = data.GetUpperBound(1);
+
+        for (int i = 0; i <= rMax; i++)
         {
-            return;
-        }
-        int[,] maze = data;
-
-        //Similar to doing maze[0].Length
-        int rowMax = maze.GetUpperBound(0);
-        int colMax = maze.GetUpperBound(1);
-
-        string msg = "";
-
-        for (int i = 0; i <= rowMax; i++)
-        {
-            for (int j = 0; j <= colMax; j++)
+            for (int j = 0; j <= cMax; j++)
             {
-                if (maze[i, j] == 0)
+                //Create floors and ceilings
+                if (data[i, j] != 1)
                 {
-                    msg += "....";
+                    Instantiate(floor, new Vector3(j * hallWidth, 0, i * hallWidth),
+                        Quaternion.LookRotation(Vector3.up), parent.transform);
+                    Instantiate(floor, new Vector3(j * hallWidth, hallHeight, i * hallWidth),
+                       Quaternion.LookRotation(Vector3.down), parent.transform);
                 }
-                else
+                //Walls next to blocked cells
+                //If a wall behind
+                if (i - 1 < 0 || data[i - 1, j] == 1)
                 {
-                    msg += "==";
+                    Instantiate(wall,
+                     new Vector3(j * hallWidth, 0, (i - 0.5f) * hallWidth),
+                     Quaternion.LookRotation(Vector3.forward), parent.transform);
+                }
+
+                //Wall to the right
+                if (j + 1 > cMax || data[i, j + 1] == 1)
+                {
+                    Instantiate(wall,
+                     new Vector3((j + .5f) * hallWidth, 0, i * hallWidth),
+                     Quaternion.LookRotation(Vector3.left), parent.transform);
+                }
+
+                //Wall to the left
+                if (j - 1 < 0 || data[i, j - 1] == 1)
+                {
+                    Instantiate(wall,
+                     new Vector3((j - .5f) * hallWidth, 0, i * hallWidth),
+                     Quaternion.LookRotation(Vector3.right), parent.transform);
+                }
+
+                //Wall in front
+                if (i + 1 > rMax || data[i + 1, j] == 1)
+                {
+                    Instantiate(wall,
+                        new Vector3(j * hallWidth, 0, (i + .5f) * hallWidth),
+                        Quaternion.LookRotation(Vector3.back), parent.transform);
                 }
             }
-            msg += "\n";
         }
-
-        //Draw a rectangle on the GUI with the maze
-        GUI.Label(new Rect(20, 20, 500, 500), msg);
     }
 }
