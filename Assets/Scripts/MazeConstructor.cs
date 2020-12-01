@@ -6,8 +6,9 @@ public class MazeConstructor : MonoBehaviour
 {
     public bool showDebug;
 
-    [SerializeField] private Material treasureMat;
-    [SerializeField] private Material startMat;
+    [SerializeField] private GameObject treasure;
+    [SerializeField] private GameObject startPortal;
+    [SerializeField] private GameObject gunPickup;
     [SerializeField] private GameObject floor;
     [SerializeField] private GameObject wall;
 
@@ -68,8 +69,10 @@ public class MazeConstructor : MonoBehaviour
                 }
             }
         }
+
         startRow = freeSpots[0][0];
         startCol = freeSpots[0][1];
+        freeSpots.RemoveAt(0);
     }
 
     //Place treasure at last empty spot
@@ -77,17 +80,17 @@ public class MazeConstructor : MonoBehaviour
     {
         goalRow = freeSpots[freeSpots.Count - 1][0];
         goalCol = freeSpots[freeSpots.Count - 1][1];
+        freeSpots.RemoveAt(freeSpots.Count - 1);
     }
 
     //Create object for start trigger and fill its properties
     public void PlaceStartTrigger(TriggerEventHandler callback)
     {
-        GameObject gObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        gObj.transform.position = new Vector3(startCol * hallWidth, .5f, startRow * hallHeight);
+        GameObject gObj = Instantiate(startPortal,
+            new Vector3(startCol * hallWidth, 0, startRow * hallHeight), Quaternion.identity);
         gObj.name = "Start Trigger";
         gObj.tag = "Generated";
 
-        gObj.GetComponent<MeshRenderer>().sharedMaterial = startMat;
         gObj.GetComponent<BoxCollider>().isTrigger = true;
 
         TriggerEventRouter tc = gObj.AddComponent<TriggerEventRouter>();
@@ -97,14 +100,25 @@ public class MazeConstructor : MonoBehaviour
     //Create object for treasure and fill its properties
     public void PlaceGoalTrigger(TriggerEventHandler callback)
     {
-        GameObject gObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        gObj.transform.position = new Vector3(goalCol * hallWidth, .5f, startRow * goalCol);
+        GameObject gObj = Instantiate(treasure, new Vector3(goalCol * hallWidth, 0, goalRow * hallHeight), Quaternion.identity);
         GlobalVars.goalPos = new Vector3(gObj.transform.position.x, 1, gObj.transform.position.z);
         gObj.name = "Treasure";
         gObj.tag = "Generated";
         gObj.layer = LayerMask.NameToLayer("AIGuard");
-        gObj.GetComponent<MeshRenderer>().sharedMaterial = treasureMat;
-        gObj.GetComponent<BoxCollider>().isTrigger = true;
+
+
+        TriggerEventRouter tc = gObj.AddComponent<TriggerEventRouter>();
+        tc.callback = callback;
+    }
+
+    public void PlaceGunPickup(TriggerEventHandler callback)
+    {
+        int randomPlace = Random.Range(0, freeSpots.Count);
+        int gunRow = freeSpots[randomPlace][0];
+        int gunCol = freeSpots[randomPlace][1];
+        GameObject gObj = Instantiate(gunPickup, new Vector3(gunCol * hallWidth, 0, gunRow * hallHeight), Quaternion.identity);
+        gObj.name = "GunPickup";
+        gObj.tag = "Generated";
 
         TriggerEventRouter tc = gObj.AddComponent<TriggerEventRouter>();
         tc.callback = callback;
@@ -112,7 +126,8 @@ public class MazeConstructor : MonoBehaviour
 
 
     public void GenerateNewMaze(int maxRows, int maxCols,
-                TriggerEventHandler startCallback = null, TriggerEventHandler goalCallback = null)
+                TriggerEventHandler startCallback = null, TriggerEventHandler goalCallback = null,
+                TriggerEventHandler gunCallback = null)
     {
         if (maxCols % 2 == 0 || maxRows % 2 == 0)
         {
@@ -134,6 +149,7 @@ public class MazeConstructor : MonoBehaviour
 
         PlaceStartTrigger(startCallback);
         PlaceGoalTrigger(goalCallback);
+        PlaceGunPickup(gunCallback);
         GlobalVars.freeSpots = freeSpots;
     }
 

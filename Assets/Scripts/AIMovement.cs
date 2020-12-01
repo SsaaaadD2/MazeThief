@@ -30,7 +30,6 @@ public class AIMovement : MonoBehaviour
         {
             //Run if the guard has seen the player, walk otherwise
             float speedPercent = (agent.velocity.magnitude / agent.speed) * (detection.hasDetected == true ? 1 : 0.7f);
-            Debug.Log("Speed percent " + speedPercent);
             animator.SetFloat("speedPercent", speedPercent, damping, Time.deltaTime);
         }
     }

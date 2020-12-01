@@ -53,7 +53,8 @@ public class GameController : MonoBehaviour
 
     private void StartNewMaze()
     {
-        generator.GenerateNewMaze(maxRows, maxCols, OnStartTrigger, OnGoalTrigger);
+        FadeText();
+        generator.GenerateNewMaze(maxRows, maxCols, OnStartTrigger, OnGoalTrigger, OnGunTrigger);
         navMeshSurface.BuildNavMesh();
         Invoke("CreateGuard", 5f);
         float x = generator.startCol * generator.hallWidth;
@@ -97,25 +98,40 @@ public class GameController : MonoBehaviour
 
     private void OnGoalTrigger(GameObject trigger, GameObject other)
     {
-        Debug.Log("Won!");
-        goalReached = true;
+        if (other.tag == "Player")
+        {
+            goalReached = true;
 
-        score += 1;
-        scoreLabel.text = score.ToString();
-        instruction.text = "Get back home!";
-        instruction.CrossFadeAlpha(1, 0.5f, false);
-        Invoke("FadeText", 4f);
+            score += 1;
+            scoreLabel.text = score.ToString();
+            instruction.text = "Get back home!";
+            instruction.CrossFadeAlpha(1, 0.5f, false);
+            Invoke("FadeText", 4f);
 
-        Destroy(trigger);
+            Destroy(trigger);
+        }
+
     }
 
     private void OnStartTrigger(GameObject trigger, GameObject other)
     {
         if (goalReached)
         {
-            Debug.Log("Start again");
             player.enabled = false;
+            instruction.text = "You made it!";
+            instruction.CrossFadeAlpha(1, 0.5f, false);
             Invoke("StartNewMaze", 4f);
+        }
+    }
+
+    private void OnGunTrigger(GameObject trigger, GameObject other)
+    {
+        if (other.tag == "Player")
+        {
+            instruction.text = "Gun Picked Up";
+            instruction.CrossFadeAlpha(1, 0.5f, false);
+            Invoke("FadeText", 4f);
+            Destroy(trigger);
         }
     }
 
