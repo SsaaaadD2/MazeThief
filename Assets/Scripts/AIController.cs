@@ -123,6 +123,7 @@ public class AIController : MonoBehaviour
         {
             SlowDown();
             hitParticles.Play();
+            Destroy(other.gameObject);
         }
     }
 }

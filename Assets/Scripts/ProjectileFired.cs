@@ -22,12 +22,4 @@ public class ProjectileFired : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-    void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Trigger entered");
-
-        Destroy(gameObject);
-
-    }
 }
