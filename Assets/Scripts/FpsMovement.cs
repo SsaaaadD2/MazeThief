@@ -27,10 +27,13 @@ public class FpsMovement : MonoBehaviour
     private float rotationVert = 0;
 
     private CharacterController charController;
+    private GunMovement gunMovement;
 
     void Start()
     {
         charController = GetComponent<CharacterController>();
+        gunMovement = GetComponentInChildren<GunMovement>();
+        gunMovement.gameObject.SetActive(false);
     }
 
     void Update()
@@ -44,6 +47,16 @@ public class FpsMovement : MonoBehaviour
     {
         float deltaX = Input.GetAxis("Horizontal") * speed;
         float deltaZ = Input.GetAxis("Vertical") * speed;
+
+        //Animate the gun to move if we are moving
+        if (gunMovement && (deltaX != 0 || deltaZ != 0))
+        {
+            gunMovement.isMoving = true;
+        }
+        else
+        {
+            gunMovement.isMoving = false;
+        }
 
         Vector3 movement = new Vector3(deltaX, 0, deltaZ);
         movement = Vector3.ClampMagnitude(movement, speed);
@@ -68,5 +81,10 @@ public class FpsMovement : MonoBehaviour
         headCam.transform.localEulerAngles = new Vector3(
             rotationVert, headCam.transform.localEulerAngles.y, 0
         );
+    }
+
+    public void EnableGun()
+    {
+        gunMovement.gameObject.SetActive(true);
     }
 }

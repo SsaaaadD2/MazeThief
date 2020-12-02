@@ -38,8 +38,8 @@ public class GameController : MonoBehaviour
 
     private void StartGame()
     {
-        timeLimit = 80;
-        reduceLimitBy = 5;
+        timeLimit = 90;
+        reduceLimitBy = 10;
         score = 0;
 
 
@@ -56,7 +56,7 @@ public class GameController : MonoBehaviour
         FadeText();
         generator.GenerateNewMaze(maxRows, maxCols, OnStartTrigger, OnGoalTrigger, OnGunTrigger);
         navMeshSurface.BuildNavMesh();
-        Invoke("CreateGuard", 5f);
+        Invoke("CreateGuard", 15f);
         float x = generator.startCol * generator.hallWidth;
         float y = 1.0f;
         float z = generator.startRow * generator.hallHeight;
@@ -90,7 +90,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            timeLabel.text = "TIME UP";
+            instruction.text = "TIME UP";
             player.enabled = false;
             Invoke("StartGame", 4f);
         }
@@ -101,9 +101,6 @@ public class GameController : MonoBehaviour
         if (other.tag == "Player")
         {
             goalReached = true;
-
-            score += 1;
-            scoreLabel.text = score.ToString();
             instruction.text = "Get back home!";
             instruction.CrossFadeAlpha(1, 0.5f, false);
             Invoke("FadeText", 4f);
@@ -117,6 +114,8 @@ public class GameController : MonoBehaviour
     {
         if (goalReached)
         {
+            score += 1;
+            scoreLabel.text = score.ToString();
             player.enabled = false;
             instruction.text = "You made it!";
             instruction.CrossFadeAlpha(1, 0.5f, false);
@@ -128,7 +127,8 @@ public class GameController : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            instruction.text = "Gun Picked Up";
+            other.GetComponent<FpsMovement>().EnableGun();
+            instruction.text = "Gun picked up";
             instruction.CrossFadeAlpha(1, 0.5f, false);
             Invoke("FadeText", 4f);
             Destroy(trigger);

@@ -13,7 +13,7 @@ public class AIMovement : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        detection = GetComponent<AIDetection>();
+        detection = GetComponentInChildren<AIDetection>();
     }
 
     void Update()
@@ -33,4 +33,6 @@ public class AIMovement : MonoBehaviour
             animator.SetFloat("speedPercent", speedPercent, damping, Time.deltaTime);
         }
     }
+
+
 }

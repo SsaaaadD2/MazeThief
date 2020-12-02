@@ -116,6 +116,8 @@ public class MazeConstructor : MonoBehaviour
         int randomPlace = Random.Range(0, freeSpots.Count);
         int gunRow = freeSpots[randomPlace][0];
         int gunCol = freeSpots[randomPlace][1];
+        // int gunRow = freeSpots[0][0];
+        // int gunCol = freeSpots[0][1];
         GameObject gObj = Instantiate(gunPickup, new Vector3(gunCol * hallWidth, 0, gunRow * hallHeight), Quaternion.identity);
         gObj.name = "GunPickup";
         gObj.tag = "Generated";

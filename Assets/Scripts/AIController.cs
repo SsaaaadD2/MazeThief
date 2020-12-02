@@ -1,22 +1,31 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class AIController : MonoBehaviour
 {
     private GameObject player;
     private bool targetSet;
+    private bool playerInRange;
+    private Vector3 destination;
+
     private NavMeshAgent agent;
     private AIDetection detection;
+    private ParticleSystem hitParticles;
 
     private const float SPEED_RUN = 7f;
     private const float SPEED_WALK = 4f;
+    private const float SPEED_SLOWDOWN = 2f;
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player");
-        detection = GetComponent<AIDetection>();
+        detection = GetComponentInChildren<AIDetection>();
         gameObject.tag = "Generated";
 
+        playerInRange = false;
+        hitParticles = GetComponent<ParticleSystem>();
         targetSet = false;
     }
 
@@ -32,22 +41,88 @@ public class AIController : MonoBehaviour
                             1, GlobalVars.hallWidth * GlobalVars.freeSpots[position][1]);
             agent.Warp(pos);
             agent.stoppingDistance = 3f;
+
+            //For some reason these values become messed up so I force them correct
+            agent.baseOffset = 0;
+            GenerateNewDestination();
+            agent.speed = SPEED_WALK;
         }
         if (targetSet)
         {
-            agent.SetDestination(player.transform.position);
+            if (playerInRange)
+            {
+                agent.SetDestination(player.transform.position);
 
-            //Guard should run once he sees the player, and walk otherwise
-            if (detection.hasDetected == true && agent.speed != SPEED_RUN)
-            {
-                agent.speed = SPEED_RUN;
+                //Guard should run once he sees the player, and walk otherwise
+                //This only applies if he is not hit with the speed gun
+                if (detection.hasDetected == true && agent.speed == SPEED_WALK)
+                {
+                    agent.speed = SPEED_RUN;
+                }
+                else if (detection.hasDetected == false && agent.speed == SPEED_RUN)
+                {
+                    agent.speed = SPEED_WALK;
+                }
+
             }
-            else if (detection.hasDetected == false && agent.speed != SPEED_WALK)
+            //If player is not within range, walk to a random location in search
+            //If close to destination, generate a new location
+            else
             {
-                agent.speed = SPEED_WALK;
+                if (Vector3.Distance(transform.position, destination) <= 10)
+                {
+                    GenerateNewDestination();
+                }
             }
         }
+    }
 
+    public void SlowDown()
+    {
+        agent.speed = SPEED_SLOWDOWN;
 
+        //If guard was hit by slowdown gun, slow down for 5 seconds
+        Invoke("SpeedUp", 5f);
+    }
+
+    private void SpeedUp()
+    {
+        agent.speed = SPEED_WALK;
+    }
+
+    public void PlayerInRange()
+    {
+        playerInRange = true;
+    }
+
+    public void PlayerOutOfRange()
+    {
+        Invoke("LostSight", 5f);
+
+    }
+
+    private void LostSight()
+    {
+        playerInRange = false;
+        GenerateNewDestination();
+    }
+
+    private void GenerateNewDestination()
+    {
+        Debug.Log("New destination");
+        int pos = Random.Range(0, GlobalVars.freeSpots.Count);
+        List<int> coords = GlobalVars.freeSpots[pos];
+        destination = new Vector3(coords[0] * GlobalVars.hallHeight, 0, coords[1] * GlobalVars.hallWidth);
+        agent.SetDestination(destination);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        //Slow down guard and play particle effect
+        if (other.tag == "Projectile")
+        {
+            SlowDown();
+            hitParticles.Play();
+        }
     }
 }

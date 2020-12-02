@@ -10,6 +10,7 @@ public class AIDetection : MonoBehaviour
     private MeshRenderer textMeshRenderer;
     private bool isTransparent;
     private SphereCollider sphereCollider;
+    private AIController controller;
 
     void Start()
     {
@@ -18,6 +19,7 @@ public class AIDetection : MonoBehaviour
         sphereCollider = GetComponent<SphereCollider>();
         hasDetected = false;
         isTransparent = true;
+        controller = GetComponentInParent<AIController>();
     }
     // Start is called before the first frame update
     void Update()
@@ -35,6 +37,11 @@ public class AIDetection : MonoBehaviour
     {
         textMeshRenderer.enabled = (textMeshRenderer.enabled == true ? false : true);
         isTransparent = !isTransparent;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        controller.PlayerInRange();
     }
 
     void OnTriggerStay(Collider other)
@@ -63,6 +70,7 @@ public class AIDetection : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             hasDetected = false;
+            controller.PlayerOutOfRange();
         }
     }
 }
