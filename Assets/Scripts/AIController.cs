@@ -80,6 +80,7 @@ public class AIController : MonoBehaviour
     public void SlowDown()
     {
         agent.speed = SPEED_SLOWDOWN;
+        hitParticles.Play();
 
         //If guard was hit by slowdown gun, slow down for 5 seconds
         Invoke("SpeedUp", 5f);
@@ -116,14 +117,5 @@ public class AIController : MonoBehaviour
         agent.SetDestination(destination);
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        //Slow down guard and play particle effect
-        if (other.tag == "Projectile")
-        {
-            SlowDown();
-            hitParticles.Play();
-            Destroy(other.gameObject);
-        }
-    }
+
 }
