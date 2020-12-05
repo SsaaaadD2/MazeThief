@@ -55,7 +55,6 @@ public class AIDetection : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, direction.normalized, out hit, sphereCollider.radius))
                 {
-                    Debug.DrawLine(transform.position + transform.up, sphereCollider.radius * transform.forward, Color.red);
                     if (hit.collider.gameObject.tag == "Player")
                     {
                         hasDetected = true;
@@ -65,12 +64,14 @@ public class AIDetection : MonoBehaviour
         }
     }
 
-    void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            hasDetected = false;
-            controller.PlayerOutOfRange();
-        }
-    }
+    //Not using feature of guard losing track of player
+
+    // void OnTriggerExit(Collider other)
+    // {
+    //     if (other.gameObject.tag == "Player")
+    //     {
+    //         hasDetected = false;
+    //         controller.PlayerOutOfRange();
+    //     }
+    // }
 }

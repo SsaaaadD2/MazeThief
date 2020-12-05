@@ -7,6 +7,7 @@ TagManager:
   - Generated
   - Detection
   - Projectile
+  - Hit
   layers:
   - Default
   - TransparentFX

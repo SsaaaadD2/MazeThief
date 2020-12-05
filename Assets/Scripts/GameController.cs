@@ -7,7 +7,7 @@ using static GlobalVars;
 [RequireComponent(typeof(MazeConstructor))]
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private FpsMovement player;
+    [SerializeField] private GameObject player;
     [SerializeField] private Text timeLabel;
     [SerializeField] private Text scoreLabel;
     [SerializeField] private Text instruction;
@@ -61,8 +61,9 @@ public class GameController : MonoBehaviour
         float y = 1.0f;
         float z = generator.startRow * generator.hallHeight;
 
-        player.transform.position = new Vector3(x, y, z);
-        player.enabled = true;
+
+        GameObject obj = Instantiate(player, new Vector3(x, y, z), Quaternion.LookRotation(Vector3.forward));
+        player.SetActive(true);
         goalReached = false;
 
         timeLimit -= reduceLimitBy;
@@ -79,7 +80,7 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!player.enabled)
+        if (!player.activeSelf)
         {
             return;
         }
@@ -91,7 +92,7 @@ public class GameController : MonoBehaviour
         else
         {
             instruction.text = "TIME UP";
-            player.enabled = false;
+            player.SetActive(false);
             Invoke("StartGame", 4f);
         }
     }
@@ -116,7 +117,7 @@ public class GameController : MonoBehaviour
         {
             score += 1;
             scoreLabel.text = score.ToString();
-            player.enabled = false;
+            player.SetActive(false);
             instruction.text = "You made it!";
             instruction.CrossFadeAlpha(1, 0.5f, false);
             Invoke("StartNewMaze", 4f);

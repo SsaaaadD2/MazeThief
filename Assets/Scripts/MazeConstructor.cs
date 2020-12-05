@@ -47,6 +47,7 @@ public class MazeConstructor : MonoBehaviour
         {
             Destroy(maze);
         }
+        freeSpots.Clear();
     }
 
     //Find all the empty spots

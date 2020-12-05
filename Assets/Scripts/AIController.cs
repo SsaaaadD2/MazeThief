@@ -93,20 +93,22 @@ public class AIController : MonoBehaviour
 
     public void PlayerInRange()
     {
+        //Once the player is found, guard is always chasing
         playerInRange = true;
     }
 
-    public void PlayerOutOfRange()
-    {
-        Invoke("LostSight", 5f);
+    //Decided not to use the feature of a guard losing track of the player
 
-    }
+    // public void PlayerOutOfRange()
+    // {
+    //     Invoke("LostSight", 5f);
+    // }
 
-    private void LostSight()
-    {
-        playerInRange = false;
-        GenerateNewDestination();
-    }
+    // private void LostSight()
+    // {
+    //     playerInRange = false;
+    //     GenerateNewDestination();
+    // }
 
     private void GenerateNewDestination()
     {
