@@ -1,5 +1,88 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1888456478943410691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1988468357040991995}
+  - component: {fileID: 5163114388703747899}
+  - component: {fileID: 4111273490618147609}
+  m_Layer: 0
+  m_Name: GunCam
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1988468357040991995
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888456478943410691}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6472452192852361198}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &5163114388703747899
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888456478943410691}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 3
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!124 &4111273490618147609
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888456478943410691}
+  m_Enabled: 1
 --- !u!1 &6472452192852361195
 GameObject:
   m_ObjectHideFlags: 0
@@ -31,6 +114,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1988468357040991995}
   - {fileID: 6472452193963509634}
   - {fileID: 6472452194531643742}
   m_Father: {fileID: 6472452193004903510}
@@ -402,7 +486,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6472452192852361198}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &6472452193963509633
 Light:
@@ -474,7 +558,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6472452194172358522}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ProjectileSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -524,7 +608,7 @@ Transform:
   m_Children:
   - {fileID: 7846039522019846867}
   m_Father: {fileID: 6472452192852361198}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7846039521847785682
 GameObject:
@@ -538,7 +622,7 @@ GameObject:
   - component: {fileID: 7846039521847785686}
   - component: {fileID: 7846039521847785687}
   - component: {fileID: 7846039521847785684}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -638,7 +722,7 @@ GameObject:
   - component: {fileID: 7846039522019846865}
   - component: {fileID: 7846039522019076851}
   - component: {fileID: 7846039522017945651}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Gun_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -721,7 +805,7 @@ GameObject:
   - component: {fileID: 7846039522019948272}
   - component: {fileID: 7846039522019948276}
   - component: {fileID: 7846039522019948278}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -901,7 +985,7 @@ GameObject:
   - component: {fileID: 7846039522019846869}
   - component: {fileID: 7846039522019076855}
   - component: {fileID: 7846039522017945655}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Gun_Loader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -983,7 +1067,7 @@ GameObject:
   - component: {fileID: 7846039522019846871}
   - component: {fileID: 7846039522019076849}
   - component: {fileID: 7846039522017945649}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Gun_Bullet_Hole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1064,7 +1148,7 @@ GameObject:
   - component: {fileID: 7846039522019846875}
   - component: {fileID: 7846039522019076853}
   - component: {fileID: 7846039522017945653}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Gun_Tigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1145,7 +1229,7 @@ GameObject:
   - component: {fileID: 7846039522113702855}
   - component: {fileID: 7846039522113702713}
   - component: {fileID: 7846039522113702854}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Text (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1220,7 +1304,7 @@ GameObject:
   - component: {fileID: 7846039522145251440}
   - component: {fileID: 7846039522145251442}
   - component: {fileID: 7846039522145251443}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Text (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1299,7 +1383,7 @@ GameObject:
   - component: {fileID: 7846039522273360668}
   - component: {fileID: 7846039522273360670}
   - component: {fileID: 7846039522273360671}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
