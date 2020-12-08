@@ -48,6 +48,8 @@ public class MazeConstructor : MonoBehaviour
             Destroy(maze);
         }
         freeSpots.Clear();
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        Destroy(player);
     }
 
     //Find all the empty spots

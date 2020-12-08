@@ -80,11 +80,18 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!player.activeSelf)
+        if (!player.GetComponent<FpsMovement>().enabled)
         {
             return;
         }
         int timeUsed = (int)(DateTime.Now - starttime).TotalSeconds;
+
+        if (guardAgent.caughtPlayer)
+        {
+            instruction.text = "The guard caught you!";
+            player.GetComponent<FpsMovement>().enabled = false;
+            Invoke("StartGame", 4f);
+        }
         if (timeLimit - timeUsed >= 0)
         {
             timeLabel.text = (timeLimit - timeUsed).ToString();
@@ -92,7 +99,7 @@ public class GameController : MonoBehaviour
         else
         {
             instruction.text = "TIME UP";
-            player.SetActive(false);
+            player.GetComponent<FpsMovement>().enabled = false;
             Invoke("StartGame", 4f);
         }
     }
@@ -117,7 +124,7 @@ public class GameController : MonoBehaviour
         {
             score += 1;
             scoreLabel.text = score.ToString();
-            player.SetActive(false);
+            player.GetComponent<FpsMovement>().enabled = false;
             instruction.text = "You made it!";
             instruction.CrossFadeAlpha(1, 0.5f, false);
             Invoke("StartNewMaze", 4f);

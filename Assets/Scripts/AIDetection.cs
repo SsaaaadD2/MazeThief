@@ -39,10 +39,11 @@ public class AIDetection : MonoBehaviour
         isTransparent = !isTransparent;
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        controller.PlayerInRange();
-    }
+    //Not using feature of chasing player only if he's in range
+    // void OnTriggerEnter(Collider other)
+    // {
+    //     controller.PlayerInRange();
+    // }
 
     void OnTriggerStay(Collider other)
     {

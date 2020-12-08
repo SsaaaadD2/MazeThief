@@ -23,8 +23,13 @@ public class FpsMovement : MonoBehaviour
 
     public float minimumVert = -45.0f;
     public float maximumVert = 45.0f;
+    public AudioSource audioSource;
 
     private float rotationVert = 0;
+
+    //Needs to be synced to gun bob animation time
+    private float stepTime = 0.4f;
+    private float accumulatedDistance = 0;
 
     private CharacterController charController;
     private GunMovement gunMovement;
@@ -66,6 +71,21 @@ public class FpsMovement : MonoBehaviour
         movement = transform.TransformDirection(movement);
 
         charController.Move(movement);
+
+        if (charController.velocity.sqrMagnitude > 0)
+        {
+            accumulatedDistance += Time.deltaTime;
+            if (accumulatedDistance > stepTime)
+            {
+                audioSource.Play();
+                accumulatedDistance = 0;
+            }
+        }
+        else
+        {
+            accumulatedDistance = 0;
+            audioSource.Stop();
+        }
     }
 
     private void RotateCharacter()

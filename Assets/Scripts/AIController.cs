@@ -17,6 +17,8 @@ public class AIController : MonoBehaviour
     private const float SPEED_RUN = 7f;
     private const float SPEED_WALK = 4f;
     private const float SPEED_SLOWDOWN = 2f;
+
+    public bool caughtPlayer = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,36 +46,42 @@ public class AIController : MonoBehaviour
 
             //For some reason these values become messed up so I force them correct
             agent.baseOffset = 0;
-            GenerateNewDestination();
+            //GenerateNewDestination();
             agent.speed = SPEED_WALK;
         }
         if (targetSet)
         {
-            if (playerInRange)
-            {
-                agent.SetDestination(player.transform.position);
+            //if (playerInRange)
+            //{
 
-                //Guard should run once he sees the player, and walk otherwise
-                //This only applies if he is not hit with the speed gun
-                if (detection.hasDetected == true && agent.speed == SPEED_WALK)
-                {
-                    agent.speed = SPEED_RUN;
-                }
-                else if (detection.hasDetected == false && agent.speed == SPEED_RUN)
-                {
-                    agent.speed = SPEED_WALK;
-                }
-
-            }
-            //If player is not within range, walk to a random location in search
-            //If close to destination, generate a new location
-            else
+            if (Vector3.Distance(transform.position, player.transform.position) <= agent.stoppingDistance
+                && agent.speed != SPEED_SLOWDOWN)
             {
-                if (Vector3.Distance(transform.position, destination) <= 10)
-                {
-                    GenerateNewDestination();
-                }
+                caughtPlayer = true;
             }
+            agent.SetDestination(player.transform.position);
+
+            //Guard should run once he sees the player, and walk otherwise
+            //This only applies if he is not hit with the speed gun
+            if (detection.hasDetected == true && agent.speed == SPEED_WALK)
+            {
+                agent.speed = SPEED_RUN;
+            }
+            else if (detection.hasDetected == false && agent.speed == SPEED_RUN)
+            {
+                agent.speed = SPEED_WALK;
+            }
+
+            // }
+            // //If player is not within range, walk to a random location in search
+            // //If close to destination, generate a new location
+            // else
+            // {
+            //     if (Vector3.Distance(transform.position, destination) <= 10)
+            //     {
+            //         GenerateNewDestination();
+            //     }
+            // }
         }
     }
 
@@ -91,11 +99,13 @@ public class AIController : MonoBehaviour
         agent.speed = SPEED_WALK;
     }
 
-    public void PlayerInRange()
-    {
-        //Once the player is found, guard is always chasing
-        playerInRange = true;
-    }
+    //Decided not to use feature of guard going to a random spot
+
+    // public void PlayerInRange()
+    // {
+    //     //Once the player is found, guard is always chasing
+    //     playerInRange = true;
+    // }
 
     //Decided not to use the feature of a guard losing track of the player
 
@@ -110,14 +120,14 @@ public class AIController : MonoBehaviour
     //     GenerateNewDestination();
     // }
 
-    private void GenerateNewDestination()
-    {
-        Debug.Log("New destination");
-        int pos = Random.Range(0, GlobalVars.freeSpots.Count);
-        List<int> coords = GlobalVars.freeSpots[pos];
-        destination = new Vector3(coords[0] * GlobalVars.hallHeight, 0, coords[1] * GlobalVars.hallWidth);
-        agent.SetDestination(destination);
-    }
+    // private void GenerateNewDestination()
+    // {
+    //     Debug.Log("New destination");
+    //     int pos = Random.Range(0, GlobalVars.freeSpots.Count);
+    //     List<int> coords = GlobalVars.freeSpots[pos];
+    //     destination = new Vector3(coords[0] * GlobalVars.hallHeight, 0, coords[1] * GlobalVars.hallWidth);
+    //     agent.SetDestination(destination);
+    // }
 
 
 }
