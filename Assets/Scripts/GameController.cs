@@ -56,7 +56,7 @@ public class GameController : MonoBehaviour
         FadeText();
         generator.GenerateNewMaze(maxRows, maxCols, OnStartTrigger, OnGoalTrigger, OnGunTrigger);
         navMeshSurface.BuildNavMesh();
-        Invoke("CreateGuard", 15f);
+        Invoke("CreateGuard", 20f);
         float x = generator.startCol * generator.hallWidth;
         float y = 1.0f;
         float z = generator.startRow * generator.hallHeight;
