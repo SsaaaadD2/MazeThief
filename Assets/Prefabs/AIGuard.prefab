@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 1920848278325722158}
   m_Layer: 9
   m_Name: AIGuard
-  m_TagString: Untagged
+  m_TagString: Generated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4843,6 +4843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a8aec03096f0a4e8a5900996e6fcda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  caughtPlayer: 0
 --- !u!114 &3609637464287490946
 MonoBehaviour:
   m_ObjectHideFlags: 0

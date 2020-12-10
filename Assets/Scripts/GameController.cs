@@ -59,7 +59,6 @@ public class GameController : MonoBehaviour
         FadeText();
         generator.GenerateNewMaze(maxRows, maxCols, OnStartTrigger, OnGoalTrigger, OnGunTrigger);
         navMeshSurface.BuildNavMesh();
-        Invoke("CreateGuard", 5f);
         float x = generator.startCol * generator.hallWidth;
         float y = 1.0f;
         float z = generator.startRow * generator.hallHeight;
@@ -72,6 +71,11 @@ public class GameController : MonoBehaviour
         goalReached = false;
 
         timeLimit -= reduceLimitBy;
+        if (timeLimit >= 30)
+        {
+
+            Invoke("CreateGuard", 20f);
+        }
         instruction.text = "Get to the treasure!";
         instruction.enabled = true;
         Invoke("FadeText", 4f);
@@ -95,7 +99,6 @@ public class GameController : MonoBehaviour
 
         if (guardAgentInstance && guardAgentInstance.caughtPlayer)
         {
-            Debug.Log("Caught");
             instruction.text = "The guard caught you!";
             instruction.CrossFadeAlpha(1, 0.5f, false);
             player.enabled = false;
@@ -131,7 +134,7 @@ public class GameController : MonoBehaviour
 
     private void OnStartTrigger(GameObject trigger, GameObject other)
     {
-        if (goalReached)
+        if ((other.tag == "Player" && goalReached) || (int.Parse(timeLabel.text.ToString()) <= 20 && goalReached))
         {
             score += 1;
             scoreLabel.text = score.ToString();

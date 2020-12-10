@@ -157,8 +157,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -3}
-  m_SizeDelta: {x: 877.9048, y: 129.19681}
+  m_AnchoredPosition: {x: 0, y: -23.999985}
+  m_SizeDelta: {x: 877.9048, y: 212.24911}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &111882433
 MonoBehaviour:
@@ -181,12 +181,21 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: 'Get the battery and get out before time runs out! Be careful, because
-    the guard is onto you. You might want to find a weapon to slow him down first.
+    the guard is onto you. Try searching for a weapon. You can''t kill him, but you
+    can slow him down.
 
 
-    You
-    score one point each time you get back home with the treasure. Each round, your
-    time decreases.
+    You score one point each time you get back home with
+    the treasure. Each round, your time decreases.
+
+
+    If you get too close to
+    the guard, he will catch you. But if he''s slowed down, you can slip past him
+    without trouble.
+
+
+    If you''re running out of time but you can see your portal,
+    try shooting at it! Only if you''re nearly out of time though.
 
 '
   m_isRightToLeft: 0
@@ -216,8 +225,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 16
+  m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1315,7 +1324,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -129}
+  m_AnchoredPosition: {x: 0, y: -163}
   m_SizeDelta: {x: 135.65405, y: 65.750885}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1421753271
@@ -1846,7 +1855,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4528302, g: 0.44172305, b: 0.44172305, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

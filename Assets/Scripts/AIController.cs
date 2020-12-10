@@ -23,6 +23,7 @@ public class AIController : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        Debug.Log("player= " + player.name);
         detection = GetComponentInChildren<AIDetection>();
         gameObject.tag = "Generated";
 
