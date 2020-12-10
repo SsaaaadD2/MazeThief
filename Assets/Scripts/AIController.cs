@@ -18,17 +18,18 @@ public class AIController : MonoBehaviour
     private const float SPEED_WALK = 4f;
     private const float SPEED_SLOWDOWN = 2f;
 
-    public bool caughtPlayer = false;
+    public bool caughtPlayer;
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
         detection = GetComponentInChildren<AIDetection>();
         gameObject.tag = "Generated";
 
         playerInRange = false;
         hitParticles = GetComponent<ParticleSystem>();
         targetSet = false;
+        caughtPlayer = false;
     }
 
     // Update is called once per frame

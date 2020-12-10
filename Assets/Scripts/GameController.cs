@@ -7,7 +7,7 @@ using static GlobalVars;
 [RequireComponent(typeof(MazeConstructor))]
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
+    [SerializeField] private FpsMovement player;
     [SerializeField] private Text timeLabel;
     [SerializeField] private Text scoreLabel;
     [SerializeField] private Text instruction;
@@ -15,6 +15,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private int maxRows;
 
     public NavMeshSurface navMeshSurface;
+
+    //The generic AIController prefab to instantiate each time
     public AIController guardAgent;
     //public NavMeshAgent playerAgent;
 
@@ -26,6 +28,9 @@ public class GameController : MonoBehaviour
 
     private int score;
     private bool goalReached;
+
+    //The specific instance against which we check if we were caught
+    private AIController guardAgentInstance;
 
     // Start is called before the first frame update
     void Start()
@@ -45,8 +50,6 @@ public class GameController : MonoBehaviour
 
         timeLabel.text = timeLimit.ToString();
         scoreLabel.text = score.ToString();
-        instruction.text = "Get to the treasure!";
-        instruction.enabled = true;
         StartNewMaze();
 
     }
@@ -56,17 +59,21 @@ public class GameController : MonoBehaviour
         FadeText();
         generator.GenerateNewMaze(maxRows, maxCols, OnStartTrigger, OnGoalTrigger, OnGunTrigger);
         navMeshSurface.BuildNavMesh();
-        Invoke("CreateGuard", 20f);
+        Invoke("CreateGuard", 5f);
         float x = generator.startCol * generator.hallWidth;
         float y = 1.0f;
         float z = generator.startRow * generator.hallHeight;
 
 
-        GameObject obj = Instantiate(player, new Vector3(x, y, z), Quaternion.LookRotation(Vector3.forward));
-        player.SetActive(true);
+        player.transform.position = new Vector3(x, y, z);
+        player.transform.rotation = Quaternion.LookRotation(Vector3.forward);
+        player.enabled = true;
+        player.DisableGun();
         goalReached = false;
 
         timeLimit -= reduceLimitBy;
+        instruction.text = "Get to the treasure!";
+        instruction.enabled = true;
         Invoke("FadeText", 4f);
         starttime = DateTime.Now;
     }
@@ -80,26 +87,30 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!player.GetComponent<FpsMovement>().enabled)
+        if (!player.enabled)
         {
             return;
         }
         int timeUsed = (int)(DateTime.Now - starttime).TotalSeconds;
 
-        if (guardAgent.caughtPlayer)
+        if (guardAgentInstance && guardAgentInstance.caughtPlayer)
         {
+            Debug.Log("Caught");
             instruction.text = "The guard caught you!";
-            player.GetComponent<FpsMovement>().enabled = false;
+            instruction.CrossFadeAlpha(1, 0.5f, false);
+            player.enabled = false;
             Invoke("StartGame", 4f);
         }
-        if (timeLimit - timeUsed >= 0)
+        else if (timeLimit - timeUsed >= 0)
         {
+
             timeLabel.text = (timeLimit - timeUsed).ToString();
         }
         else
         {
             instruction.text = "TIME UP";
-            player.GetComponent<FpsMovement>().enabled = false;
+            instruction.CrossFadeAlpha(1, 0.5f, false);
+            player.enabled = false;
             Invoke("StartGame", 4f);
         }
     }
@@ -124,7 +135,7 @@ public class GameController : MonoBehaviour
         {
             score += 1;
             scoreLabel.text = score.ToString();
-            player.GetComponent<FpsMovement>().enabled = false;
+            player.enabled = false;
             instruction.text = "You made it!";
             instruction.CrossFadeAlpha(1, 0.5f, false);
             Invoke("StartNewMaze", 4f);
@@ -145,7 +156,7 @@ public class GameController : MonoBehaviour
 
     private void CreateGuard()
     {
-        Instantiate(guardAgent, Vector3.zero, Quaternion.identity);
+        guardAgentInstance = Instantiate(guardAgent, Vector3.zero, Quaternion.identity);
         instruction.text = "Guard has been released";
         instruction.CrossFadeAlpha(1, 0.5f, false);
         Invoke("FadeText", 4f);

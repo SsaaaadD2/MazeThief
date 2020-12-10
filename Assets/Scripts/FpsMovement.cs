@@ -36,6 +36,7 @@ public class FpsMovement : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("called here");
         charController = GetComponent<CharacterController>();
         gunMovement = GetComponentInChildren<GunMovement>();
         gunMovement.gameObject.SetActive(false);
@@ -106,5 +107,14 @@ public class FpsMovement : MonoBehaviour
     public void EnableGun()
     {
         gunMovement.gameObject.SetActive(true);
+    }
+
+    public void DisableGun()
+    {
+        if (gunMovement)
+        {
+
+            gunMovement.gameObject.SetActive(false);
+        }
     }
 }
