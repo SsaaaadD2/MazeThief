@@ -77,7 +77,7 @@ public class GameController : MonoBehaviour
             Invoke("CreateGuard", 20f);
         }
         instruction.text = "Get to the treasure!";
-        instruction.enabled = true;
+        instruction.CrossFadeAlpha(1, 0.5f, false);
         Invoke("FadeText", 4f);
         starttime = DateTime.Now;
     }
