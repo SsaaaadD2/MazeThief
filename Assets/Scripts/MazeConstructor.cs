@@ -16,6 +16,7 @@ public class MazeConstructor : MonoBehaviour
 
     private MazeDataGenerator dataGenerator;
     private List<List<int>> freeSpots;
+    private List<List<int>> landMarkLocations;
 
     public float hallWidth { get; private set; }
     public float hallHeight { get; private set; }
@@ -127,6 +128,11 @@ public class MazeConstructor : MonoBehaviour
         tc.callback = callback;
     }
 
+    public void PlaceLandmarks()
+    {
+
+    }
+
 
     public void GenerateNewMaze(int maxRows, int maxCols,
                 TriggerEventHandler startCallback = null, TriggerEventHandler goalCallback = null,
@@ -153,6 +159,7 @@ public class MazeConstructor : MonoBehaviour
         PlaceStartTrigger(startCallback);
         PlaceGoalTrigger(goalCallback);
         PlaceGunPickup(gunCallback);
+        PlaceLandmarks();
         GlobalVars.freeSpots = freeSpots;
     }
 

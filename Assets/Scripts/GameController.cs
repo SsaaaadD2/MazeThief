@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 using static GlobalVars;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(MazeConstructor))]
 public class GameController : MonoBehaviour
@@ -11,8 +12,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Text timeLabel;
     [SerializeField] private Text scoreLabel;
     [SerializeField] private Text instruction;
-    [SerializeField] private int maxCols;
-    [SerializeField] private int maxRows;
+
 
     public NavMeshSurface navMeshSurface;
 
@@ -25,9 +25,12 @@ public class GameController : MonoBehaviour
     private DateTime starttime;
     private int timeLimit;
     private int reduceLimitBy;
+    private int maxCols;
+    private int maxRows;
 
     private int score;
     private bool goalReached;
+    private string mapSize;
 
     //The specific instance against which we check if we were caught
     private AIController guardAgentInstance;
@@ -36,6 +39,17 @@ public class GameController : MonoBehaviour
     void Start()
     {
         generator = GetComponent<MazeConstructor>();
+        mapSize = PlayerPrefs.GetString("Map");
+        if (mapSize.Equals("Medium"))
+        {
+            maxCols = 13;
+            maxRows = 15;
+        }
+        else
+        {
+            maxCols = 17;
+            maxRows = 19;
+        }
         GlobalVars.maxCols = maxCols;
         GlobalVars.maxRows = maxRows;
         StartGame();
@@ -43,7 +57,14 @@ public class GameController : MonoBehaviour
 
     private void StartGame()
     {
-        timeLimit = 90;
+        if (mapSize.Equals("Medium"))
+        {
+            timeLimit = 90;
+        }
+        else
+        {
+            timeLimit = 110;
+        }
         reduceLimitBy = 10;
         score = 0;
 
@@ -73,8 +94,7 @@ public class GameController : MonoBehaviour
         timeLimit -= reduceLimitBy;
         if (timeLimit >= 30)
         {
-
-            Invoke("CreateGuard", 20f);
+            Invoke("CreateGuard", 15f);
         }
         instruction.text = "Get to the treasure!";
         instruction.CrossFadeAlpha(1, 0.5f, false);
@@ -118,6 +138,11 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void BackToMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     private void OnGoalTrigger(GameObject trigger, GameObject other)
     {
         if (other.tag == "Player")
@@ -139,9 +164,17 @@ public class GameController : MonoBehaviour
             score += 1;
             scoreLabel.text = score.ToString();
             player.enabled = false;
-            instruction.text = "You made it!";
+            if (timeLimit <= 20)
+            {
+                instruction.text = "You made it!";
+                Invoke("StartNewMaze", 4f);
+            }
+            else
+            {
+                instruction.text = "You've won the game!";
+                Invoke("BackToMenu", 5f);
+            }
             instruction.CrossFadeAlpha(1, 0.5f, false);
-            Invoke("StartNewMaze", 4f);
         }
     }
 
