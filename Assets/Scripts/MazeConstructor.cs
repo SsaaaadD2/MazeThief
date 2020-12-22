@@ -11,12 +11,12 @@ public class MazeConstructor : MonoBehaviour
     [SerializeField] private GameObject gunPickup;
     [SerializeField] private GameObject floor;
     [SerializeField] private GameObject wall;
+    [SerializeField] private GameObject[] landmarks;
 
     public int[,] data { get; private set; }
 
     private MazeDataGenerator dataGenerator;
     private List<List<int>> freeSpots;
-    private List<List<int>> landMarkLocations;
 
     public float hallWidth { get; private set; }
     public float hallHeight { get; private set; }
@@ -124,13 +124,23 @@ public class MazeConstructor : MonoBehaviour
         gObj.name = "GunPickup";
         gObj.tag = "Generated";
 
+        freeSpots.RemoveAt(randomPlace);
+
         TriggerEventRouter tc = gObj.AddComponent<TriggerEventRouter>();
         tc.callback = callback;
     }
 
     public void PlaceLandmarks()
     {
-
+        for (int i = 0; i < landmarks.Length; i++)
+        {
+            int position = Random.Range(0, freeSpots.Count);
+            int row = freeSpots[position][0];
+            int col = freeSpots[position][1];
+            GameObject gObj = Instantiate(landmarks[i], new Vector3(col * hallWidth, 0, row * hallHeight), Quaternion.identity);
+            gObj.tag = "Generated";
+            freeSpots.RemoveAt(position);
+        }
     }
 
 
@@ -160,6 +170,7 @@ public class MazeConstructor : MonoBehaviour
         PlaceGoalTrigger(goalCallback);
         PlaceGunPickup(gunCallback);
         PlaceLandmarks();
+
         GlobalVars.freeSpots = freeSpots;
     }
 

@@ -93,7 +93,7 @@ public class AIController : MonoBehaviour
         hitParticles.Play();
 
         //If guard was hit by slowdown gun, slow down for 5 seconds
-        Invoke("SpeedUp", 5f);
+        Invoke("SpeedUp", 8f);
     }
 
     private void SpeedUp()

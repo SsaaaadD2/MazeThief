@@ -285,8 +285,6 @@ MonoBehaviour:
   timeLabel: {fileID: 1966176014}
   scoreLabel: {fileID: 1280697454}
   instruction: {fileID: 1555417601}
-  maxCols: 13
-  maxRows: 15
   navMeshSurface: {fileID: 1047214446}
   guardAgent: {fileID: 5245822631564429147, guid: 77d6eaf7698ecdb4d936322b027e2892,
     type: 3}
@@ -309,6 +307,13 @@ MonoBehaviour:
     type: 3}
   floor: {fileID: 7307990154515016594, guid: 03d6982a319eee249aceae856ae2f305, type: 3}
   wall: {fileID: 132796, guid: f3a954679d4d04b49953424fc6bf526c, type: 3}
+  landmarks:
+  - {fileID: 5124117585384368579, guid: b45b8f80fd26f9244bd8fc8b8d02b944, type: 3}
+  - {fileID: 4335215953695596909, guid: ff69ebeadce471e4eaedfafca48bc8eb, type: 3}
+  - {fileID: 4176269388278743459, guid: eec163426be167e469f1c6bf8a452ddd, type: 3}
+  - {fileID: 8663377114499297290, guid: 6d22472d117e75d4188d811cf556c7b3, type: 3}
+  - {fileID: 2495932434489763774, guid: d2229493e942fdc4281fe4bf5e1b0c42, type: 3}
+  - {fileID: 2002083183550363151, guid: b6cf7edb1e2971544af295aa26366ffd, type: 3}
 --- !u!1 &974588508
 GameObject:
   m_ObjectHideFlags: 0
