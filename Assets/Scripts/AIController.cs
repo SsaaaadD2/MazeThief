@@ -47,7 +47,7 @@ public class AIController : MonoBehaviour
             Vector3 pos = new Vector3(GlobalVars.hallHeight * GlobalVars.freeSpots[position][0],
                             1, GlobalVars.hallWidth * GlobalVars.freeSpots[position][1]);
             agent.Warp(pos);
-            agent.stoppingDistance = 2f;
+            agent.stoppingDistance = 3f;
 
             //For some reason these values become messed up so I force them correct
             agent.baseOffset = 0;
@@ -72,12 +72,12 @@ public class AIController : MonoBehaviour
             if (detection.hasDetected == true && agent.speed == SPEED_WALK)
             {
                 agent.speed = SPEED_RUN;
-                stepTime = 0.2f;
+                stepTime = 0.35f;
             }
             else if (detection.hasDetected == false && agent.speed == SPEED_RUN)
             {
                 agent.speed = SPEED_WALK;
-                stepTime = 0.3f;
+                stepTime = 0.4f;
             }
 
             PlayFootsteps();

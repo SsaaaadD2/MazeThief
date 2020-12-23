@@ -25,12 +25,16 @@ public class ProjectileFired : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collider " + other.name);
+        Destroy(gameObject);
         //Slow down guard and play particle effect
         if (other.tag == "Hit")
         {
             other.GetComponentInParent<AIController>().SlowDown();
-            Destroy(gameObject);
+
+        }
+        else if (other.GetComponent<MakeSplatter>() != null)
+        {
+            other.GetComponent<MakeSplatter>().splatter = true;
         }
     }
 }

@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class MakeSplatter : MonoBehaviour
 {
+    private GameObject splatterDecal;
+    public bool splatter = false;
     // Start is called before the first frame update
     void Start()
     {
-        
+        splatterDecal = transform.GetChild(0).gameObject;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (splatter)
+        {
+            splatterDecal.SetActive(true);
+        }
     }
 }
