@@ -261,20 +261,20 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Get the battery and get out before time runs out! Be careful, because
     the guard is onto you. Try searching for a weapon. You can''t kill him, but you
-    can slow him down.
+    can slow him down. Aim for the head!
 
 
-    You score one point each time you get back home with
-    the treasure. Each round, your time decreases.
+    You score one point each time you
+    get back home with the treasure. Each round, your time decreases.
 
 
-    If you get too close to
-    the guard, he will catch you. But if he''s slowed down, you can slip past him
-    without trouble.
+    If you
+    get too close to the guard, he will catch you. But if he''s slowed down, you
+    can slip past him without trouble.
 
 
-    If you''re running out of time but you can see your portal,
-    try shooting at it! Only if you''re nearly out of time though.
+    If you''re running out of time but you
+    can see your portal, try shooting at it! Only if you''re nearly out of time though.
 
 '
   m_isRightToLeft: 0

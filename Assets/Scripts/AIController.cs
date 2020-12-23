@@ -13,6 +13,9 @@ public class AIController : MonoBehaviour
     private NavMeshAgent agent;
     private AIDetection detection;
     private ParticleSystem hitParticles;
+    private AudioSource audioSource;
+    private float accumulatedDistance = 0f;
+    private float stepTime = 0f;
 
     private const float SPEED_RUN = 7f;
     private const float SPEED_WALK = 4f;
@@ -23,9 +26,9 @@ public class AIController : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        Debug.Log("player= " + player.name);
         detection = GetComponentInChildren<AIDetection>();
         gameObject.tag = "Generated";
+        audioSource = GetComponent<AudioSource>();
 
         playerInRange = false;
         hitParticles = GetComponent<ParticleSystem>();
@@ -44,12 +47,13 @@ public class AIController : MonoBehaviour
             Vector3 pos = new Vector3(GlobalVars.hallHeight * GlobalVars.freeSpots[position][0],
                             1, GlobalVars.hallWidth * GlobalVars.freeSpots[position][1]);
             agent.Warp(pos);
-            agent.stoppingDistance = 3f;
+            agent.stoppingDistance = 2f;
 
             //For some reason these values become messed up so I force them correct
             agent.baseOffset = 0;
             //GenerateNewDestination();
             agent.speed = SPEED_WALK;
+            stepTime = 0.4f;
         }
         if (targetSet)
         {
@@ -68,11 +72,15 @@ public class AIController : MonoBehaviour
             if (detection.hasDetected == true && agent.speed == SPEED_WALK)
             {
                 agent.speed = SPEED_RUN;
+                stepTime = 0.2f;
             }
             else if (detection.hasDetected == false && agent.speed == SPEED_RUN)
             {
                 agent.speed = SPEED_WALK;
+                stepTime = 0.3f;
             }
+
+            PlayFootsteps();
 
             // }
             // //If player is not within range, walk to a random location in search
@@ -87,10 +95,29 @@ public class AIController : MonoBehaviour
         }
     }
 
+    private void PlayFootsteps()
+    {
+        if (agent.velocity.sqrMagnitude > 0)
+        {
+            accumulatedDistance += Time.deltaTime;
+            if (accumulatedDistance > stepTime)
+            {
+                audioSource.Play();
+                accumulatedDistance = 0;
+            }
+        }
+        else
+        {
+            accumulatedDistance = 0;
+            audioSource.Stop();
+        }
+    }
+
     public void SlowDown()
     {
         agent.speed = SPEED_SLOWDOWN;
         hitParticles.Play();
+        stepTime = 0.6f;
 
         //If guard was hit by slowdown gun, slow down for 5 seconds
         Invoke("SpeedUp", 8f);
@@ -99,6 +126,7 @@ public class AIController : MonoBehaviour
     private void SpeedUp()
     {
         agent.speed = SPEED_WALK;
+        stepTime = 0.4f;
     }
 
     //Decided not to use feature of guard going to a random spot

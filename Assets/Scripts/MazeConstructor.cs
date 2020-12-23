@@ -11,7 +11,7 @@ public class MazeConstructor : MonoBehaviour
     [SerializeField] private GameObject gunPickup;
     [SerializeField] private GameObject floor;
     [SerializeField] private GameObject wall;
-    [SerializeField] private GameObject[] landmarks;
+    [SerializeField] private List<GameObject> landmarks;
 
     public int[,] data { get; private set; }
 
@@ -132,12 +132,29 @@ public class MazeConstructor : MonoBehaviour
 
     public void PlaceLandmarks()
     {
-        for (int i = 0; i < landmarks.Length; i++)
+        //Empty gameobject to parent the landmarks to
+        GameObject go = new GameObject();
+        go.transform.position = Vector3.zero;
+        go.name = "Landmarks";
+        go.tag = "Generated";
+
+        //For a large maze we want twice the number of landmarks
+        //So we add another copy of each landmark to our list which we iterate through later
+        if (PlayerPrefs.GetString("Map").Equals("Large"))
         {
+            int length = landmarks.Count;
+            for (int i = 0; i < length; i++)
+            {
+                landmarks.Add(landmarks[i]);
+            }
+        }
+        for (int i = 0; i < landmarks.Count; i++)
+        {
+            //Create landmarks in any random free spot
             int position = Random.Range(0, freeSpots.Count);
             int row = freeSpots[position][0];
             int col = freeSpots[position][1];
-            GameObject gObj = Instantiate(landmarks[i], new Vector3(col * hallWidth, 0, row * hallHeight), Quaternion.identity);
+            GameObject gObj = Instantiate(landmarks[i], new Vector3(col * hallWidth, 0, row * hallHeight), Quaternion.identity, go.transform);
             gObj.tag = "Generated";
             freeSpots.RemoveAt(position);
         }
